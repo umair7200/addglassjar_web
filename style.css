@@ -1,0 +1,191 @@
+:root {
+    --primary: #8b4513;
+    --secondary: #6d4c41;
+    --tertiary: #558b2f;
+    --water-color: #29b6f6;
+    --jar-bg: rgba(129, 212, 250, 0.2);
+    --bg-color: #ffffff;
+    --text-color: #212121;
+    --card-bg: #f5f5f5;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+#app {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+header {
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+    color: var(--primary);
+}
+
+#multiplier-badge {
+    background: #fff3e0;
+    color: #ef6c00;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 8px;
+    border: 1px solid #ffe0b2;
+}
+
+.jar-container {
+    width: 180px;
+    height: 240px;
+    background: var(--jar-bg);
+    border: 3px solid rgba(0,0,0,0.1);
+    border-radius: 20px 20px 40px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.water {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0%;
+    background-color: var(--water-color);
+    transition: height 0.5s ease-out;
+}
+
+/* Wave Animation */
+.water::before {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 20px;
+    top: -15px;
+    left: -50%;
+    background: radial-gradient(circle at 50% 100%, transparent 5px, var(--water-color) 6px);
+    background-size: 20px 20px;
+    animation: wave 2s infinite linear;
+}
+
+@keyframes wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(20px); }
+}
+
+.stats-row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.stat-card {
+    flex: 1;
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.label { font-size: 12px; color: #757575; }
+.value { font-size: 20px; font-weight: bold; margin: 4px 0; }
+.sub-label { font-size: 14px; color: var(--secondary); }
+
+.actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.revenue-note {
+    font-size: 13px;
+    color: #4caf50;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-primary { background-color: var(--primary); width: 100%; }
+.auto-row { display: flex; gap: 8px; }
+.btn-secondary { background-color: var(--secondary); flex: 1; }
+.btn-tertiary { background-color: var(--tertiary); flex: 1; }
+
+.card {
+    width: 100%;
+    background: #eceff1;
+    padding: 20px;
+    border-radius: 16px;
+    box-sizing: border-box;
+}
+
+.hidden { display: none; }
+
+h3 { margin-top: 0; }
+.small { font-size: 12px; margin: 4px 0; color: #607d8b; }
+.note { font-size: 11px; color: #d32f2f; margin-bottom: 12px; }
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.method-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.chip {
+    flex: 1;
+    background: #cfd8dc;
+    color: #455a64;
+    font-size: 14px;
+    padding: 8px;
+}
+
+.chip.active {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-payout {
+    background: #2e7d32;
+    width: 100%;
+}

@@ -123,65 +123,59 @@ function updateUI() {
 }
 
 // --- ACTIONS ---
-document.getElementById('btn-claim').addEventListener('click', () => {
+document.getElementById('btn-claim').addEventListener('click', async () => {
     tg.HapticFeedback.impactOccurred('medium');
-    showAd(() => claim(1));
+    await triggerAdsConsecutively(1);
 });
 
 document.getElementById('btn-auto-5').addEventListener('click', () => {
-    tg.showConfirm("Watch 5 ads for x5 multiplier?", (ok) => {
-        if (ok) {
-            let shown = 0;
-            const loop = () => {
-                showAd(() => {
-                    shown++;
-                    state.multiplier = shown;
-                    updateUI();
-                    if (shown < 5) {
-                        loop();
-                    } else {
-                        claim(5);
-                    }
-                });
-            };
-            loop();
-        }
+    tg.showConfirm("Watch 5 ads for x5 multiplier?", async (ok) => {
+        if (ok) await triggerAdsConsecutively(5);
     });
 });
 
 document.getElementById('btn-auto-10').addEventListener('click', () => {
-    tg.showConfirm("Watch 10 ads for x10 multiplier?", (ok) => {
-        if (ok) {
-            let shown = 0;
-            const loop = () => {
-                showAd(() => {
-                    shown++;
-                    state.multiplier = shown;
-                    updateUI();
-                    if (shown < 10) {
-                        loop();
-                    } else {
-                        claim(10);
-                    }
-                });
-            };
-            loop();
-        }
+    tg.showConfirm("Watch 10 ads for x10 multiplier?", async (ok) => {
+        if (ok) await triggerAdsConsecutively(10);
     });
 });
 
-function showAd(callback) {
-    if (typeof window.show_11602627 === 'function') {
+/**
+ * Shows the requested number of ads sequentially, waiting for each ad to
+ * finish before starting the next one. The same function handles 1, 5, and
+ * 10-ad button clicks.
+ */
+async function triggerAdsConsecutively(adCount) {
+    if (![1, 5, 10].includes(adCount)) return;
+
+    for (let shown = 1; shown <= adCount; shown++) {
+        const completed = await showAd();
+        if (!completed) return;
+
+        state.multiplier = shown;
+        updateUI();
+    }
+
+    await claim(adCount);
+}
+
+function showAd() {
+    return new Promise((resolve) => {
+        if (typeof window.show_11602627 !== 'function') {
+            tg.showAlert("Ad engine starting... please wait.");
+            resolve(false);
+            return;
+        }
+
         window.show_11602627().then(() => {
             tg.showAlert('You have seen an ad!');
-            callback();
+            resolve(true);
         }).catch((e) => {
             console.error("Ad error", e);
             tg.showAlert("Ad failed or was closed early.");
+            resolve(false);
         });
-    } else {
-        tg.showAlert("Ad engine starting... please wait.");
-    }
+    });
 }
 
 async function claim(adCount) {
